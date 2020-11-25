@@ -16,10 +16,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     Context context;
 
-    public MyAdapter(Context ct, String[] s1, String[] s2){
+    interface ListItemClickListener {
+        void onListItemClick(int position);
+    }
+
+    final private ListItemClickListener mOnClickListener;
+
+    public MyAdapter(Context ct, String[] s1, String[] s2, ListItemClickListener mOnClickListener){
         context = ct;
         data1 = s1;
         data2 = s2;
+        this.mOnClickListener = mOnClickListener;
     }
 
     @NonNull
@@ -41,12 +48,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         return data1.length;
     }
 
-    public class MyViewHolder extends  RecyclerView.ViewHolder {
+    public class MyViewHolder extends  RecyclerView.ViewHolder implements View.OnClickListener {
         TextView myText1, myText2;
         public  MyViewHolder(@NonNull View itemView) {
             super(itemView);
             myText1 = itemView.findViewById(R.id.programming_language_txt);
             myText2 = itemView.findViewById(R.id.description_txt);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            mOnClickListener.onListItemClick(position);
         }
     }
 }
